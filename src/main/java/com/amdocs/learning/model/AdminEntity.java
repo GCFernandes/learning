@@ -1,0 +1,33 @@
+package com.amdocs.learning.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import lombok.Data;
+
+@Data
+@Entity
+@Table(name = AdminEntity.TABLE_NAME)
+public class AdminEntity {
+
+    public static final String ENTITY_NAME = "AdminEntity";
+    public static final String TABLE_NAME = "ADMIN";
+
+    @Id
+    @Column(name = "ADMIN_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "NAME", length = 100)
+    private String name;
+
+    @Column(name = "EMAIL", length = 100)
+    private String email;
+
+    @Column(name = "PASSWORD", length = 100)
+    private String password;
+}

@@ -1,0 +1,117 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.1.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+    id "org.flywaydb.flyway" version "5.2.4"
+}
+
+group 'com.amdocs'
+version '1.0-SNAPSHOT'
+
+//projectName.mainClassName = "com.amdocs.learning.Learning"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    compile("org.mariadb.jdbc:mariadb-java-client:2.1.0")
+
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+
+    testCompile 'org.projectlombok:lombok:1.18.8'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.8'
+
+    //Older version for junit
+//    testCompile group: 'junit', name: 'junit', version: '4.12'
+//    testCompile group: 'org.powermock', name: 'powermock-core', version: '1.7.4'
+//    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.7.4'
+//    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '1.7.4'
+
+    //Newer version for junit
+    testCompile group: 'junit', name: 'junit', version: '4.13'
+    testCompile group: 'org.powermock', name: 'powermock-core', version: '2.0.4'
+    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.4'
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.4'
+
+    //for application test
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
+        exclude module: 'junit'
+    }
+    testRuntime("com.h2database:h2:1.4.197")
+
+}
+
+//Flyway configuration
+flyway {
+    url = 'jdbc:mariadb://localhost:3306/learning'
+    user = 'root'
+    password = '123456'
+}
+//Flyway configuration END
+
+
+//JUnit Test configurations
+//Changing logging and properties
+test {
+    minHeapSize = "512m"
+    maxHeapSize = "1024m"
+    ignoreFailures = false
+
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+        exceptionFormat "full"
+
+        debug {
+            events "PASSED", "FAILED", "SKIPPED", "STARTED"
+        }
+    }
+}
+//JUnit Test configurations END
+
+//Application Test configurations
+//setting the Application Tests source
+sourceSets {
+    testApplication {
+        java {
+            compileClasspath += sourceSets.main.output + configurations.testCompile
+            runtimeClasspath += output + compileClasspath + configurations.testRuntime
+            srcDir file('src/testApplication/java')
+        }
+        resources.srcDir 'src/testApplication/resources'
+    }
+}
+
+//creating the task to run the application tests
+task testApplication(type: Test, dependsOn: build) {
+    minHeapSize = "512m"
+    maxHeapSize = "1024m"
+    ignoreFailures = false
+
+    testClassesDirs = sourceSets.testApplication.output.classesDirs
+    classpath = sourceSets.testApplication.runtimeClasspath
+    outputs.upToDateWhen { false }
+
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+        exceptionFormat "full"
+
+        debug {
+            events "PASSED", "FAILED", "SKIPPED", "STARTED"
+        }
+    }
+}
+
+//Report for test errors
+tasks.withType(Test) {
+    reports.html.destination = file("${reporting.baseDir}/${name}")
+}
+//Application Test configurations END

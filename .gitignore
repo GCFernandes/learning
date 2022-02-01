@@ -1,0 +1,8 @@
+# ignore an entire directory
+**/.idea/
+**/.gradle/
+**/build/
+**/out/
+
+# ignore a file type
+*.iml
