@@ -45,6 +45,7 @@ public class ContactService {
             entity.setPhone(ContactVO.getPhone());
             entity.setEmail(ContactVO.getEmail());
             entity.setMessage(ContactVO.getMessage());
+            entity.setUser(ContactVO.getUser());
             repository.save(entity);
             return true;
         }

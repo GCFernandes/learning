@@ -17,6 +17,9 @@ public class ContactEntity {
     public static final String ENTITY_NAME = "ContactEntity";
     public static final String TABLE_NAME = "CONTACT";
 
+    @Column(name = "USER_ID")
+    private int user;
+
     @Column(name = "NAME", length = 100)
     private String name;
 

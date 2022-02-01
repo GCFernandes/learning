@@ -13,6 +13,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class ContactVO {
 
+    private int user;
     private String name;
     private String email;
     private int phone;

@@ -7,7 +7,7 @@ public class ContactConverter {
 
     public static ContactVO toVO(ContactEntity entity){
         log.debug("entity={}, message=Converting to VO", entity.toString());
-        return new ContactVO(entity.getName(), entity.getEmail(), entity.getPhone(), entity.getMessage(), entity.getId());
+        return new ContactVO(entity.getUser(), entity.getName(), entity.getEmail(), entity.getPhone(), entity.getMessage(), entity.getId());
     }
 
     public static ContactEntity toEntity(ContactVO vo){
@@ -18,6 +18,7 @@ public class ContactConverter {
         entity.setPhone(vo.getPhone());
         entity.setEmail(vo.getEmail());
         entity.setMessage(vo.getMessage());
+        entity.setUser(vo.getUser());
         return entity;
     }
 }
